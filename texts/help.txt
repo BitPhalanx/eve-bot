@@ -24,10 +24,11 @@ example: "Eve recommend me comedy movies"
 
 "eve stop verification": stops sending captcha to new joiners
 "eve start verification": starts sending captcha to new joiners
-"eve set welcome message to < enter your welcome message > "
-"eve set verification time to < number >: New person will have to verify within given time in minutes"
+"eve set welcome message to <enter your welcome message>"
+"eve set verification days to <number>": Accounts less than <number> days old must verify captcha
+"eve set verification time to <number>": New person will have to verify within given time in minutes
 "eve stop forever": stops sending wikipedia definitions automatically
-"eve leave": removing eve from group
+"eve leave": remove eve from the group
 
 (use the commands without " " in groups)
 *Commands only for groups*

@@ -124,11 +124,12 @@ class Verify:
         # TODO clear self.bot_info if verification is off. Also clear self.message_sent in both cases: veri on and off.
         time_ = Database("data.db").get_join_time(group_jid)
         join_time = 1 if time_ is None else time_
+        seconds_since_join = time.time() - join_time
 
         verification_status = Database("data.db").get_verification_status(group_jid)
         verification_time = Database('data.db').get_verification_time(group_jid)
 
-        if (time.time() - join_time > 43200 or join_time is 1) and verification_status != "off":
+        if ( seconds_since_join > 43200 or join_time is 1) and verification_status != "off":
             self.client.send_chat_message(group_jid,
                                           "Type the characters in the image to prove that you are not a bot."
                                           "\nYOU WILL BE REMOVED IF YOU DO NOT SOLVE IT.")
@@ -139,6 +140,14 @@ class Verify:
 
             verify_thread = Timer(verification_time, self.captcha_removal_check, args=(group_jid, peer_jid, ans))
             verify_thread.start()
+        else:
+            if verification_status != "off":
+                seconds_left = 43200 - seconds_since_join
+                hours_left = seconds_left // 3600
+                minutes_left = (seconds_left - hours_left * 3600) // 60
+                self.client.send_chat_message(group_jid,
+                                              "I am unable to send captchas for another : "
+                                              "{} hours and {} minutes".format(hours_left, minutes_left))
 
     def captcha_removal_check(self, group_jid, peer_jid, ans):
         if not self.verified[peer_jid]:
